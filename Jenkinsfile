@@ -62,7 +62,7 @@ pipeline {
         stage('Package and Publish Artifacts') {
             when {
                 anyOf {
-                    branch 'master';
+                    branch 'main';
                     // Artifacts should also be packaged and published when a new tag is discovered
                     buildingTag()
                 }
@@ -84,7 +84,7 @@ pipeline {
         stage('Dev Environment') {
             when {
                 anyOf {
-                    branch 'master';
+                    branch 'main';
                     // Dev deployment and testing should also run when a new tag is discovered
                     buildingTag()
                 }
