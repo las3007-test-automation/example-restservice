@@ -14,6 +14,8 @@ import java.util.Random;
 
 import org.apache.commons.lang3.stream.IntStreams;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -53,17 +55,17 @@ public class BooksControllerTest {
                 .andExpect(jsonPath("$.author").value(savedBook.author()));
     }
 
-    @Test
-    public void testCreateBook_InvalidJson() throws Exception {
-    	Book newBook = new Book(null, "Test Book", "Test Author");
-    	Book savedBook = new Book(RANDOM.nextLong(), newBook.title(), newBook.author());
+    @ParameterizedTest
+    @NullAndEmptySource
+    public void testCreateBook_MissingTitle(String title) throws Exception {
+    	Book newBook = new Book(null, title, "Test Author");
 
-    	Mockito.when(booksService.createBook(newBook)).thenReturn(savedBook);
-
-        mockMvc.perform(post("/books")
+    	mockMvc.perform(post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"not a book\": \"some gibberish\"}"))
+                .content(objectMapper.writeValueAsString(newBook)))
                 .andExpect(status().isBadRequest());
+
+        Mockito.verify(booksService, Mockito.never()).createBook(Mockito.any());
     }
 
     @Test

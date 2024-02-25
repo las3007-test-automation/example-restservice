@@ -1,4 +1,6 @@
 package com.example.restservice.books;
 
-public record Book(Long id, String title, String author) {
+import jakarta.validation.constraints.NotEmpty;
+
+public record Book(Long id, @NotEmpty(message = "Book title cannot be null") String title, String author) {
 }

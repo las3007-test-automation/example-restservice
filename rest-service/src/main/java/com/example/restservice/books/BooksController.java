@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/books")
 public class BooksController {
@@ -22,7 +24,7 @@ public class BooksController {
 
 	// Create a new book
 	@PostMapping
-	public Book createBook(@RequestBody Book book) {
+	public Book createBook(@Valid @RequestBody Book book) {
 		return booksService.createBook(book);
 	}
 
@@ -40,7 +42,7 @@ public class BooksController {
 
 	// Update a book by ID
 	@PutMapping("/{id}")
-	public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book updatedBook) {
+	public ResponseEntity<Book> updateBook(@PathVariable Long id, @Valid @RequestBody Book updatedBook) {
 		return booksService.updateBook(id, updatedBook)
 			.map(ResponseEntity::ok)
 			.orElse(ResponseEntity.notFound().build());
