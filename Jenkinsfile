@@ -137,6 +137,11 @@ pipeline {
                                 echo 'Running Acceptance Tests on Dev ....'
                                 sh 'mvn verify -Pacceptance-tests'
                             }
+                            post {
+				                always {
+				                    junit '**/target/failsafe-reports/*.xml'
+				                }
+				            }
                         }
                         stage('Dev Performance Tests') {
                             agent any
