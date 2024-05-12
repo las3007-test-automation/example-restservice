@@ -14,14 +14,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.example.restservice.books.models.Book;
 import com.example.restservice.environments.CIEnvironmentExtension;
-import com.example.restservice.environments.LocalEnvironmentExtension;
 
 import io.restassured.http.ContentType;
 
 @Tag("acceptance")
-@ExtendWith(LocalEnvironmentExtension.class)
+//@ExtendWith(LocalEnvironmentExtension.class)
 //@ExtendWith(DevEnvironmentExtension.class)
-//@ExtendWith(CIEnvironmentExtension.class)
+@ExtendWith(CIEnvironmentExtension.class)
 public class BooksIT {
 
     @Test
