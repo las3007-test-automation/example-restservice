@@ -119,7 +119,7 @@ pipeline {
                         //
                         // For the sake of simplicity, here we are deploying to Docker instead
                         echo "Deploying and starting rest-service:$GIT_COMMIT"
-                        sh 'docker container run -d -p 8081:8081 --name rest-service --network=cicd-demo rest-service:$GIT_COMMIT'
+                        sh 'docker container run -d -p 8081:8081 --name rest-service --network=test-automation-demo rest-service:$GIT_COMMIT'
                     }
                 }
                 stage('Dev Integration Tests') {
@@ -130,7 +130,7 @@ pipeline {
                             agent {
                                 docker {
                                     image 'maven:3.9-eclipse-temurin-21'
-                                    args '-v /root/.m2:/root/.m2 --network=cicd-demo'
+                                    args '-v /root/.m2:/root/.m2 --network=test-automation-demo'
                                 }
                             }
                             steps {
