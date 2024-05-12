@@ -140,10 +140,20 @@ public class BooksControllerTest {
     }
 
     @Test
-    public void testDeleteBook() throws Exception {
-    	Mockito.doNothing().when(booksService);
+    public void testDeleteBook_Exists() throws Exception {
+    	Long bookId = RANDOM.nextLong();
+    	Mockito.when(booksService.deleteBook(bookId)).thenReturn(true);
+
+        mockMvc.perform(delete("/books/{id}", bookId))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void testDeleteBook_NotFound() throws Exception {
+    	Long bookId = RANDOM.nextLong();
+    	Mockito.when(booksService.deleteBook(bookId)).thenReturn(false);
 
         mockMvc.perform(delete("/books/{id}", RANDOM.nextLong()))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNotFound());
     }
 }
