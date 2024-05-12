@@ -4,9 +4,13 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.example.restservice.books.models.Book;
 import com.example.restservice.environments.CIEnvironmentExtension;
@@ -27,7 +31,7 @@ public class BooksIT {
             .contentType(ContentType.JSON)
             .body(newBook)
         .when()
-            .post("/")
+            .post("/books")
         .then()
             .statusCode(200)
             .body("title", equalTo(newBook.title()))
@@ -38,36 +42,36 @@ public class BooksIT {
     public void testGetAllBooks() {
         given()
         .when()
-            .get("/")
+            .get("/books")
         .then()
             .statusCode(200)
             .body("size()", greaterThanOrEqualTo(0));
     }
 
-    @Test
-    public void testGetBookById() {
-        // Assuming there is at least one book in the system
-        Long existingBookId = 1L;
+    @ParameterizedTest
+    @MethodSource("bookCreator")
+    public void testGetBookById(Book book) {
+        Long existingBookId = book.id();
 
         given()
         .when()
-            .get("/" + existingBookId)
+            .get("/books/{id}", existingBookId)
         .then()
             .statusCode(200)
             .body("id", equalTo(existingBookId.intValue()));
     }
 
-    @Test
-    public void testUpdateBook() {
-        // Assuming there is at least one book in the system
-        Long existingBookId = 1L;
+    @ParameterizedTest
+    @MethodSource("bookCreator")
+    public void testUpdateBook(Book book) {
+        Long existingBookId = book.id();
         Book updatedBook = new Book(null, "Updated Book", "Updated Author");
 
         given()
             .contentType(ContentType.JSON)
             .body(updatedBook)
         .when()
-            .put("/" + existingBookId)
+            .put("/books/{id}", existingBookId)
         .then()
             .statusCode(200)
             .body("title", equalTo(updatedBook.title()))
@@ -81,7 +85,7 @@ public class BooksIT {
 
         given()
         .when()
-            .delete("/" + existingBookId)
+            .delete("/books/{id}", existingBookId)
         .then()
             .statusCode(204);
     }
@@ -93,7 +97,7 @@ public class BooksIT {
             .contentType("application/json")
             .body("{}")
         .when()
-            .post("/")
+            .post("/books")
         .then()
             .statusCode(400);  // Bad Request
     }
@@ -103,7 +107,7 @@ public class BooksIT {
         // Test retrieving a non-existing book
         given()
         .when()
-            .get("/9999")
+            .get("/books/9999")
         .then()
             .statusCode(404);  // Not Found
     }
@@ -115,7 +119,7 @@ public class BooksIT {
             .contentType("application/json")
             .body("{\"title\": \"Updated Book\", \"author\": \"Updated Author\"}")
         .when()
-            .put("/9999")
+            .put("/books/9999")
         .then()
             .statusCode(404);  // Not Found
     }
@@ -125,20 +129,36 @@ public class BooksIT {
         // Test deleting a non-existing book
         given()
         .when()
-            .delete("/9999")
+            .delete("/books/9999")
         .then()
             .statusCode(404);  // Not Found
     }
 
-    @Test
-    public void testCreateBookDuplicateId() {
+    @ParameterizedTest
+    @MethodSource("bookCreator")
+    public void testCreateBookDuplicateId(Book book) {
         // Test creating a book with a duplicate ID
         given()
             .contentType("application/json")
-            .body("{\"id\": 1, \"title\": \"Duplicate Book\", \"author\": \"Duplicate Author\"}")
+            .body("{\"id\": " + book.id() + ", \"title\": \"Duplicate Book\", \"author\": \"Duplicate Author\"}")
         .when()
-            .post("/")
+            .post("/books")
         .then()
             .statusCode(409);  // Conflict
     }
+
+    private static Stream<Book> bookCreator() {
+        Book book = new Book(null, "Another Test Book", "bookCreator");
+
+        Book createdBook = given()
+            .contentType(ContentType.JSON)
+            .body(book)
+        .when()
+            .post("/books")
+        .then()
+        	.extract()
+        	.as(Book.class);
+        
+        return Stream.of(createdBook);
+	}
 }

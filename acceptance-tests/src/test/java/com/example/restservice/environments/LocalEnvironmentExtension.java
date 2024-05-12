@@ -12,6 +12,7 @@ public class LocalEnvironmentExtension implements BeforeAllCallback, AfterAllCal
 	public void beforeAll(ExtensionContext context) throws Exception {
 		RestAssured.port = 8081;
 		RestAssured.baseURI = "http://localhost";
+		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 	}
 
 	@Override
