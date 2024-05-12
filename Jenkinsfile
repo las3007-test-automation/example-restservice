@@ -138,10 +138,10 @@ pipeline {
                                 sh 'mvn verify -Pacceptance-tests'
                             }
                             post {
-				                always {
-				                    junit '**/target/failsafe-reports/*.xml'
-				                }
-				            }
+                                always {
+                                    junit '**/target/failsafe-reports/*.xml'
+                                }
+                            }
                         }
                         stage('Dev Performance Tests') {
                             agent any
