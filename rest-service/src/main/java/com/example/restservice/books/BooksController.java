@@ -37,7 +37,9 @@ public class BooksController {
 	// Get a specific book by ID
 	@GetMapping("/{id}")
 	public ResponseEntity<Book> getBookById(@PathVariable Long id) {
-		return booksService.getBookById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+		return booksService.getBookById(id)
+				.map(ResponseEntity::ok)
+				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	// Update a book by ID
@@ -51,7 +53,6 @@ public class BooksController {
 	// Delete a book by ID
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
-		booksService.deleteBook(id);
-		return ResponseEntity.noContent().build();
+		return booksService.deleteBook(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
 	}
 }

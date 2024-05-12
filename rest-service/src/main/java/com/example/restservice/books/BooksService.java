@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.restservice.exceptions.ResourceAlreadyExistsException;
+
 @Service
 public class BooksService {
 
@@ -13,10 +15,13 @@ public class BooksService {
 	private long nextId = 1;
 
 	// Create a new book
-	public Book createBook(Book book) {
-		book = new Book(nextId++, book.title(), book.author());
-		books.add(book);
-		return book;
+	public Book createBook(final Book book) {
+		if (books.stream().anyMatch((b) -> b.id().equals(book.id()))) {
+			throw new ResourceAlreadyExistsException();
+		}
+		Book newBook = new Book(nextId++, book.title(), book.author());
+		books.add(newBook);
+		return newBook;
 	}
 
 	// Get all books
@@ -43,7 +48,7 @@ public class BooksService {
 	}
 
 	// Delete a book by ID
-	public void deleteBook(Long id) {
-		books.removeIf(book -> book.id().equals(id));
+	public boolean deleteBook(Long id) {
+		return books.removeIf(book -> book.id().equals(id));
 	}
 }
