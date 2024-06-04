@@ -1,2 +1,2 @@
-# test-automation-example-restservice
-A simple REST service to showcase test automation
+# API Testing
+Testing of API witn the ability of Jenkins
