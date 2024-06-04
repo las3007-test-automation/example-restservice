@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.example.restservice.environments.CIEnvironmentExtension;
+import com.las3007.restservice.environments.CIEnvironmentExtension;
 
 @Tag("acceptance")
 @ExtendWith(CIEnvironmentExtension.class)
