@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.example</groupId>
+	<artifactId>acceptance-tests</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<properties>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>5.10.2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>io.rest-assured</groupId>
+				<artifactId>rest-assured-bom</artifactId>
+				<version>5.4.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>2.16.1</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-suite-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.2.5</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
