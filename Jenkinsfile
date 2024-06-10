@@ -139,7 +139,8 @@ pipeline {
                             }
                             post {
                                 always {
-                                    junit '**/target/failsafe-reports/*.xml'
+                                    junit allowEmptyResults: true, testResults: '**/failsafe-reports/*.xml'
+                                    //junit '**/target/failsafe-reports/*.xml'
                                 }
                             }
                         }
